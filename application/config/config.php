@@ -44,7 +44,7 @@ if (strpos($baselink, '192.168')) {
 } elseif (strpos($baselink, 'localhost')) {
     $config['index_page'] = 'index.php/';
 } else {
-    $config['index_page'] =  '';
+    $config['index_page'] =  'index.php';
 }
 
 /*
