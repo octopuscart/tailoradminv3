@@ -1,0 +1,28 @@
+.orderlist_stylemes{
+
+    background: #f9f9f9;
+    border: 1px solid #eee;
+}
+
+
+
+
+td {
+    font-weight: 400;
+}
+
+.tableDataOrder td{
+   border-bottom: 1px solid #000!important;
+}
+.small_table td{
+    font-weight: 400px;
+    border-bottom: 0px solid #000!important;
+}
+
+.overtext{
+    display: inline-block;
+       width: 200px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
