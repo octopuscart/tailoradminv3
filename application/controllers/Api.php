@@ -453,6 +453,8 @@ class Api extends REST_Controller {
     }
 
     public function donationListApi_get() {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
         $draw = intval($this->input->get("draw"));
         $start = intval($this->input->get("start"));
         $length = intval($this->input->get("length"));
@@ -489,22 +491,28 @@ class Api extends REST_Controller {
             "data" => $return_array
         );
         echo json_encode($output);
-        exit(); 
+        exit();
     }
 
     //Pre Design Profile
     function getUserPreDesingByItem_get($user_id, $item_id) {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
         $previouse_profiledata = $this->Product_model->selectPreviouseProfiles($user_id, $item_id);
         $this->response($previouse_profiledata);
     }
 
     function deleteUserPreDesing_get($desing_id) {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
         $this->db->set("status", "d");
         $this->db->where("id", $desing_id);
         $this->db->update("cart");
     }
 
     function favoriteUserPreDesing_get($desing_id, $status = 0) {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
         if ($status) {
             $this->db->set("status", "");
         } else {
@@ -519,17 +527,23 @@ class Api extends REST_Controller {
     //
     //pre measurement profiles
     function getUserPreMeasurementByItem_get($user_id, $item_id = "") {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
         $previouse_profiledata = $this->Product_model->selectPreviousMeasurements($user_id, $item_id);
         $this->response($previouse_profiledata);
     }
 
     function deleteUserPreMeasurement_get($mes_id) {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
         $this->db->set("status", "d");
         $this->db->where("id", $mes_id);
         $this->db->update("custom_measurement_profile");
     }
 
     function favoriteUserPreMeasurement_get($mes_id, $status = 0) {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
         if ($status) {
             $this->db->set("status", "");
         } else {
@@ -543,6 +557,8 @@ class Api extends REST_Controller {
 
 
     function getUserSubscription_get($user_id) {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
         $resultData = array("has_subscription" => "no", "subscription_data" => array());
         $querydata = $this->Order_model->getUserSubscriptionByUserId($user_id);
         if ($querydata) {
@@ -553,6 +569,8 @@ class Api extends REST_Controller {
     }
 
     function setUserSubscription_get($user_id, $sub_type) {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
         $querydata = $this->getUserSubscriptionByUserId($user_id);
         $subdata = array(
             "newsletter_type" => urldecode($sub_type),
@@ -588,6 +606,8 @@ class Api extends REST_Controller {
     }
 
     function test_resetPassword_get($user_id) {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
         $this->db->where('id', $user_id); //set column_name and value in which row need to update
         $query = $this->db->get("admin_users");
         $userData = $query->row_array();
