@@ -7,7 +7,7 @@ Admin.controller('UserController', function ($scope, $http, $timeout, $interval)
 // custome profile related
     $scope.customizationDict = {'prestyle': {}, "has_pre_design": false};
     $scope.getUserDesings = function () {
-        var url = adminurl + "Api/getUserPreDesingByItem/" + user_id + "/" + item_id;
+        var url = adminurl + "/Api/getUserPreDesingByItem/" + user_id + "/" + item_id;
         $http.get(url).then(function (rdata) {
             $scope.customizationDict.prestyle = rdata.data.designs;
             console.log(rdata.data);
@@ -74,7 +74,7 @@ Admin.controller('UserController', function ($scope, $http, $timeout, $interval)
     }
 
     $scope.getUserMeasurement = function () {
-        var url = adminurl + "Api/getUserPreMeasurementByItem/" + user_id + "/" + itemarrays;
+        var url = adminurl + "/Api/getUserPreMeasurementByItem/" + user_id + "/" + itemarrays;
         console.log(url);
         $http.get(url).then(function (rdata) {
             $scope.measurementsDict.premeasurements = rdata.data.measurement;
@@ -99,7 +99,7 @@ Admin.controller('UserController', function ($scope, $http, $timeout, $interval)
     };
 
     $scope.getUserSubscription = function () {
-        var url = adminurl + "Api/getUserSubscription/" + user_id;
+        var url = adminurl + "/Api/getUserSubscription/" + user_id;
         $http.get(url).then(function (rdata) {
             $scope.newsalertDict.user_subscription.has_subscription = rdata.data.has_subscription;
             $scope.newsalertDict.user_subscription.subscription_data = rdata.data.subscription_data;
@@ -143,7 +143,7 @@ Admin.controller('UserController', function ($scope, $http, $timeout, $interval)
                 });
                 console.log($scope.newsalertDict.selected);
 
-                $http.get(adminurl + "Api/setUserSubscription/" + user_id + "/" + $scope.newsalertDict.selected).then(function (rdata) {
+                $http.get(adminurl + "/Api/setUserSubscription/" + user_id + "/" + $scope.newsalertDict.selected).then(function (rdata) {
                     swal.close();
                     swal({
                         title: 'Subscription Updated',
