@@ -194,34 +194,82 @@ where pa.product_id=$product_id ";
         return $container;
     }
 
+    public function selectPreviouseMeasurementProfilesReport($profile_id) {
+
+        $row_query = "SELECT id, profile, order_id, user_id,  status, datetime FROM `custom_measurement_profile` where id = $profile_id order by status desc;";
+        $query = $this->db->query($row_query);
+
+        $preitemdata = array("has_pre_measurement" => false, "measurement" => array());
+        if ($query) {
+            $customdatadata = $query->row_array();
+
+            $order_no = $this->db->where("measurement_id", $customdatadata["id"])->order_by("id desc")->get("user_order")->row_array();
+
+            $customdata = $this->db->select("measurement_key, measurement_value")->where("custom_measurement_profile", $customdatadata["id"])->get("custom_measurement")->result_array();
+
+            $userdataquery = $this->db->select("first_name, last_name, email")->where("id", $customdatadata["user_id"])->get("admin_users");
+
+            $customdatadict = array();
+            foreach ($customdata as $ckey => $cvalue) {
+                $customdatadictp[$cvalue["measurement_key"]] = $cvalue["measurement_value"];
+            }
+            $preitemdata = array(
+                "name" => $customdatadata["profile"],
+                "order_no" => $order_no ? $order_no["order_no"] : "No Order",
+                "meausrement_data" => $customdatadata,
+                "measurements" => $customdata,
+                "user_data" => $userdataquery ? $userdataquery->row_array() : array()
+            );
+
+            $preitemdata["has_pre_measurement"] = true;
+        }
+        return $preitemdata;
+    }
+
+    public function singleProfileDetails($desing_id) {
+        $row_query = "SELECT  id, item_name, user_id, item_id, status,  datetime, profile FROM `cart_customization_profile` where id=$desing_id  and status!='d'  order by status desc;";
+        $query = $this->db->query($row_query);
+        $preitemdata = array("has_pre_design" => false, "designs" => array());
+        if ($query) {
+            $customdatadata = $query->row_array();
+            $userdataquery = $this->db->select("first_name, last_name, email")->where("id", $customdatadata["user_id"])->get("admin_users");
+
+            $order_no = 0; //$this->db->where("id", $customdatadata["order_id"])->get("user_order")->row_array();
+            $profilename = $customdatadata["profile"];
+            $customdata = $this->db->select("style_key, style_value")->where("profile_id", $customdatadata["id"])->get("cart_customization_profile_design")->result_array();
+
+            $customdatadict = array();
+            foreach ($customdata as $ckey => $cvalue) {
+                $customdatadictp[$cvalue["style_key"]] = $cvalue["style_value"];
+            }
+            $preitemdata = array(
+                "name" => $profilename,
+                "order_no" => $order_no ? $order_no["order_no"] : "RF" . str_replace("-", "/", $customdatadata ["id"]),
+                "cart_data" => $customdatadata,
+                "style" => $customdata,
+                "user_data" => $userdataquery ? $userdataquery->row_array() : array()
+            );
+
+            return $preitemdata;
+        }
+    }
+
     //previouse customization
     public function selectPreviouseProfiles($user_id, $item_id) {
         $itemquery = "";
         if ($item_id) {
             $itemquery = " and  item_id = $item_id";
         }
-        $row_query = "SELECT id, item_name, item_id, status,  op_date_time, order_id FROM `cart` where user_id = $user_id $itemquery   and attrs ='Custom' and status!='d' and id in (select cart_id from cart_customization) order by status desc;";
+        $row_query = "SELECT id FROM `cart_customization_profile` where user_id = $user_id $itemquery   and status!='d'  order by status desc;";
         $query = $this->db->query($row_query);
         $data = [];
         $preitemdata = array("has_pre_design" => false, "designs" => array());
         if ($query) {
             $customdatadata = $query->result_array();
             foreach ($customdatadata as $key => $value) {
-                $order_no = $this->db->where("id", $value["order_id"])->get("user_order")->row_array();
-                $profilename = $value["item_name"] . " " . $value["id"];
-                $customdata = $this->db->select("style_key, style_value")->where("cart_id", $value["id"])->get("cart_customization")->result_array();
+                $design_profile = $this->singleProfileDetails($value["id"]);
 
-                $customdatadict = array();
-                foreach ($customdata as $ckey => $cvalue) {
-                    $customdatadictp[$cvalue["style_key"]] = $cvalue["style_value"];
-                }
-                $tempdata = array(
-                    "name" => $profilename,
-                    "order_no" => $order_no ? $order_no["order_no"] : "RF" . str_replace("-", "/", $value["id"]),
-                    "cart_data" => $value,
-                    "style" => $customdata
-                );
-                array_push($preitemdata["designs"], $tempdata);
+                array_push($preitemdata["designs"], $design_profile);
                 $preitemdata["has_pre_design"] = true;
             }
         }
@@ -239,7 +287,7 @@ where pa.product_id=$product_id ";
             $customdatadata = $query->result_array();
             foreach ($customdatadata as $key => $value) {
                 $order_no = $this->db->where("measurement_id", $value["id"])->order_by("id desc")->get("user_order")->row_array();
-                
+
                 $customdata = $this->db->select("measurement_key, measurement_value")->where("custom_measurement_profile", $value["id"])->get("custom_measurement")->result_array();
 
                 $customdatadict = array();

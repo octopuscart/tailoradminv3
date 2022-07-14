@@ -20,8 +20,8 @@ echo PDF_HEADER;
     foreach ($desingdata["style"] as $key => $value) {
         ?>
         <tr >
-            <th style="text-align: right;border: 1px solid #e0e0e0;padding:10px;width: 50%"><?php echo $key;?></th>
-            <td style="border: 1px solid #e0e0e0;padding:10px;width: 50%;"><?php echo $value;?></td>
+            <th style="text-align: right;border: 1px solid #e0e0e0;padding:10px;width: 50%"><?php echo $value["style_key"];?></th>
+            <td style="border: 1px solid #e0e0e0;padding:10px;width: 50%;"><?php echo $value["style_value"];?></td>
         </tr>
         <?php
     }

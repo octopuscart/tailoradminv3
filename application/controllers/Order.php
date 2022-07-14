@@ -529,10 +529,10 @@ class Order extends CI_Controller {
     }
 
     public function selectPreviouseProfilesReport($desing_id, $ispdf_mail = 0) {
-        $desingdata = $this->Order_model->selectPreviouseProfilesReport($desing_id);
+        $desingdata = $this->Product_model->singleProfileDetails($desing_id);
         $data["desingdata"] = $desingdata;
         $html = $this->load->view('Email/desing_pdf', $data, true);
-        $checkcode = REPORT_MODE;
+        $checkcode = 1;
         if ($checkcode == 0) {
             echo $html;
         } else {
@@ -564,7 +564,7 @@ class Order extends CI_Controller {
     }
 
     public function selectPreviouseMeasurementProfilesReport($profile_id, $ispdf_mail = 0) {
-        $desingdata = $this->Order_model->selectPreviouseMeasurementProfilesReport($profile_id);
+        $desingdata = $this->Product_model->selectPreviouseMeasurementProfilesReport($profile_id);
         $data["desingdata"] = $desingdata;
         $html = $this->load->view('Email/measurement_pdf', $data, true);
         $checkcode = REPORT_MODE;
@@ -682,6 +682,12 @@ class Order extends CI_Controller {
             redirect('/');
         }
         $this->load->view('Order/orderdetailsrefund', $data);
+    }
+
+    function postureInsert() {
+
+
+  
     }
 
 }

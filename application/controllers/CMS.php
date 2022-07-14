@@ -229,8 +229,49 @@ class CMS extends CI_Controller {
         );
         $data['form_attr'] = $form_attr;
         $rdata = $this->Curd_model->curdForm($data);
-
         $this->load->view('layout/curd', $rdata);
+    }
+
+    public function createNewsletter() {
+        $data = array("ns_header" => EMAIL_HEADER, "ns_footer" => EMAIL_FOOTER);
+        $nsobj = array("title" => "", "newsletter_type" => "", "newsletter_content" => "");
+        $data["nsobj"] = $nsobj;
+        if (isset($_POST["update_data"])) {
+            $newsletterupdate = array(
+                "title" => $this->input->post("title"),
+                "newsletter_type" => $this->input->post("newsletter_type"),
+                "newsletter_content" => $this->input->post("newsletter_content"),
+                "status" => "Active"
+            );
+            $this->db->insert("newsletter_template", $newsletterupdate);
+        }
+        $this->load->view('CMS/newsletter/create', $data);
+    }
+
+    public function newsLetterTempalteList() {
+        $data = array();
+        $this->db->order_by('id', 'desc');
+        $query = $this->db->get('newsletter_template');
+        $templatelist = $query->result_array();
+        $data['templatelist'] = $templatelist;
+        $this->load->view('CMS/newsletter/templates', $data);
+    }
+
+    public function sendNewsLetter($template_id) {
+        $data = array();
+        $this->db->where('id', $template_id);
+        $query = $this->db->get('newsletter_template');
+        $templateobj = $query->row_array();
+        if ($templateobj) {
+
+            $this->db->order_by('id', 'desc');
+            $query = $this->db->get('newsletter_template');
+            $templatelist = $query->result_array();
+            $data["templateobj"] = $templateobj;
+        } else {
+            redirect("CMS/newsLetterTempalteList");
+        }
+        $this->load->view('CMS/newsletter/sendnewsletter', $data);
     }
 
 }

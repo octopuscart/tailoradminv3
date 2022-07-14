@@ -502,12 +502,19 @@ class Api extends REST_Controller {
         $this->response($previouse_profiledata);
     }
 
+    function getSingleDesing_get($design_id) {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
+        $previouse_profiledata = $this->Product_model->singleProfileDetails($design_id);
+        $this->response($previouse_profiledata);
+    }
+
     function deleteUserPreDesing_get($desing_id) {
         header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
         header('Access-Control-Allow-Origin: *');
         $this->db->set("status", "d");
         $this->db->where("id", $desing_id);
-        $this->db->update("cart");
+        $this->db->update("cart_customization_profile");
     }
 
     function favoriteUserPreDesing_get($desing_id, $status = 0) {
@@ -519,7 +526,7 @@ class Api extends REST_Controller {
             $this->db->set("status", "f");
         }
         $this->db->where("id", $desing_id);
-        $this->db->update("cart");
+        $this->db->update("cart_customization_profile");
     }
 
     //end of design profile
@@ -531,6 +538,27 @@ class Api extends REST_Controller {
         header('Access-Control-Allow-Origin: *');
         $previouse_profiledata = $this->Product_model->selectPreviousMeasurements($user_id, $item_id);
         $this->response($previouse_profiledata);
+    }
+
+    function getSingleMeasurementById_get($measurement_id) {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
+        $previouse_profiledata = $this->Product_model->selectPreviouseMeasurementProfilesReport($measurement_id);
+        $this->response($previouse_profiledata);
+    }
+
+    function getMeausrementData_get() {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
+        $this->db->select("title, min_value, max_value, standard_value");
+//        $this->db->order_by("display_index");
+        $query = $this->db->get("measurement");
+        $measurementdata = $query->result_array();
+        $measurementdataDict = array();
+        foreach ($measurementdata as $key => $value) {
+            $measurementdataDict[$value["title"]] = $value;
+        }
+        $this->response($measurementdataDict);
     }
 
     function deleteUserPreMeasurement_get($mes_id) {
@@ -571,13 +599,19 @@ class Api extends REST_Controller {
     function setUserSubscription_get($user_id, $sub_type) {
         header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
         header('Access-Control-Allow-Origin: *');
-        $querydata = $this->getUserSubscriptionByUserId($user_id);
+        $querydata = $this->Order_model->getUserSubscriptionByUserId($user_id);
+
+        $userquery = $this->db->where("id", $user_id)->get("admin_users");
+        $userdata = $userquery ? $userquery->row_array() : array("email" => "");
+
         $subdata = array(
             "newsletter_type" => urldecode($sub_type),
             'c_time' => date('H:i:s a'),
             'c_date' => date('Y-m-d'),
+            'email' => $userdata["email"],
+            'user_type' => "Website User"
         );
-        print_r($subdata);
+
         if ($querydata) {
             $this->db->set($subdata);
             $this->db->where("user_id", $user_id);
@@ -613,6 +647,35 @@ class Api extends REST_Controller {
         $userData = $query->row_array();
         $this->Order_model->resetPasswordMail($userData);
     }
+
+    function updateCustomeDesign_post() {
+        print_r($this->post());
+        $fieldname = $this->post('name');
+        $value = $this->post('value');
+        $pk_id = $this->post('pk');
+        $tablename = $this->post('tablename');
+        $foregin_id = $this->post('foregin_id');
+        $data = array("style_value" => $value);
+        $this->db->set($data);
+        $this->db->where("profile_id", $pk_id);
+        $this->db->where("style_key", $fieldname);
+        $this->db->update($tablename);
+    }
+
+    function updateCustomeMeasurement_post() {
+        print_r($this->post());
+        $fieldname = $this->post('name');
+        $value = $this->post('value');
+        $pk_id = $this->post('pk');
+        $tablename = $this->post('tablename');
+        $foregin_id = $this->post('foregin_id');
+        $data = array("measurement_value" => $value);
+        $this->db->set($data);
+        $this->db->where("custom_measurement_profile", $pk_id);
+        $this->db->where("measurement_key", $fieldname);
+        $this->db->update($tablename);
+    }
+    
 
 }
 

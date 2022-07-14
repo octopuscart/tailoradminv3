@@ -276,37 +276,7 @@ class Order_model extends CI_Model {
         return $preitemdata;
     }
 
-    //previouse customization
-    public function selectPreviouseProfilesReport($desing_id) {
 
-
-        $row_query = "SELECT id, item_name, item_id,  user_id, op_date_time, order_id FROM `cart` where  attrs ='Custom' and status!='delete' and id = $desing_id;";
-        $query = $this->db->query($row_query);
-        $data = [];
-        $preitemdata = array("has_pre_design" => false, "designs" => array());
-        if ($query) {
-            $customdatadata = $query->row_array();
-            $userdataquery = $this->db->select("first_name, last_name, email")->where("id", $customdatadata["user_id"])->get("admin_users");
-            $order_no = $this->db->where("id", $customdatadata["order_id"])->get("user_order")->row_array();
-            $profilename = $customdatadata["item_name"] . " " . $customdatadata["id"];
-            $customdata = $this->db->select("style_key, style_value")->where("cart_id", $customdatadata["id"])->get("cart_customization")->result_array();
-
-            $customdatadict = array();
-            foreach ($customdata as $ckey => $cvalue) {
-                $customdatadictp[$cvalue["style_key"]] = $cvalue["style_value"];
-            }
-            $preitemdata = array(
-                "name" => $profilename,
-                "order_no" => $order_no ? $order_no["order_no"] : "RF" . str_replace("-", "/", $customdatadata ["id"]),
-                "cart_data" => $customdatadata,
-                "style" => $customdatadictp,
-                "user_data" => $userdataquery ? $userdataquery->row_array() : array()
-            );
-            $preitemdata["has_pre_design"] = true;
-
-            return $preitemdata;
-        }
-    }
 
     public function selectPreviouseMeasurementProfilesReport($profile_id) {
 
