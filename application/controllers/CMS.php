@@ -244,6 +244,7 @@ class CMS extends CI_Controller {
                 "status" => "Active"
             );
             $this->db->insert("newsletter_template", $newsletterupdate);
+            redirect("CMS/newsLetterTempalteList");
         }
         $this->load->view('CMS/newsletter/create', $data);
     }
@@ -265,8 +266,9 @@ class CMS extends CI_Controller {
         if ($templateobj) {
 
             $this->db->order_by('id', 'desc');
-            $query = $this->db->get('newsletter_template');
-            $templatelist = $query->result_array();
+            $query = $this->db->get('newsletter_subscription');
+            $subscriptionlist = $query->result_array();
+            $data["subscriptionlist"] = $subscriptionlist;
             $data["templateobj"] = $templateobj;
         } else {
             redirect("CMS/newsLetterTempalteList");

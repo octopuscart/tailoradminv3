@@ -120,7 +120,11 @@ class Authentication extends CI_Controller {
             $this->db->where('id', $userid); //set column_name and value in which row need to update
             $this->db->update('admin_users');
             $this->userdata['image'] = $picture;
-            $this->session->set_userdata('logged_in', $this->userdata);
+            if ($user_id) {
+                
+            } else {
+                $this->session->set_userdata('logged_in', $this->userdata);
+            }
             redirect("Authentication/profile/$user_id");
         }
 
@@ -153,7 +157,7 @@ class Authentication extends CI_Controller {
                     $this->db->where("id", $userid);
                     $this->db->update("admin_users");
 
-                      redirect("Authentication/profile/$user_id");
+                    redirect("Authentication/profile/$user_id");
                 } else {
                     $message = array(
                         'title' => 'Password Error.',

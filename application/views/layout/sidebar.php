@@ -98,17 +98,16 @@ $website_content = array(
 array_push($menu_control, $website_content);
 
 $msg_menu = array(
-    "title" => "Message Management",
+    "title" => "Newsletter Management",
     "icon" => "fa fa-envelope",
     "active" => "",
     "sub_menu" => array(
-//        "Report Configuration" => site_url("Configuration/reportConfiguration"),
+        "Create Template" => site_url("CMS/createNewsletter"),
+        "Template List" => site_url("CMD/newsLetterTempalteList"),
     ),
 );
 
-//array_push($menu_control, $msg_menu);
-
-
+array_push($menu_control, $msg_menu);
 
 $user_menu = array(
     "title" => "User Management",
@@ -179,7 +178,7 @@ foreach ($menu_control as $key => $value) {
                 </div>
                 <div class="info textoverflow" >
 
-<?php echo $userdata['first_name']; ?>
+                    <?php echo $userdata['first_name']; ?>
                     <small class="textoverflow" title="<?php echo $userdata['username']; ?>"><?php echo $userdata['username']; ?></small>
                 </div>
             </li>
@@ -200,7 +199,7 @@ foreach ($menu_control as $key => $value) {
 
                 </ul>
             </li>
-<?php foreach ($menu_control as $mkey => $mvalue) { ?>
+            <?php foreach ($menu_control as $mkey => $mvalue) { ?>
 
                 <li class="has-sub <?php echo $mvalue['active']; ?>">
                     <a href="javascript:;">
@@ -209,15 +208,15 @@ foreach ($menu_control as $key => $value) {
                         <span><?php echo $mvalue['title']; ?></span>
                     </a>
                     <ul class="sub-menu">
-    <?php
-    $submenu = $mvalue['sub_menu'];
-    foreach ($submenu as $key => $value) {
-        ?>
+                        <?php
+                        $submenu = $mvalue['sub_menu'];
+                        foreach ($submenu as $key => $value) {
+                            ?>
                             <li><a href="<?php echo $value; ?>"><?php echo $key; ?></a></li>
                         <?php } ?>
                     </ul>
                 </li>
-                    <?php } ?>
+            <?php } ?>
             <li class="nav-header">Tailor Admin V <?php echo PANELVERSION; ?></li>
             <li class="nav-header">-</li>
         </ul>

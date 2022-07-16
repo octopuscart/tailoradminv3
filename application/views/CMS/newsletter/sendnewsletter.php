@@ -56,6 +56,26 @@ $this->load->view('layout/topmenu');
                                 <div class="panel-body" style="overflow-x: auto;">
                                     <b>Subscriber Emails</b><br/>
                                     <?php echo $templateobj["newsletter_type"]; ?>
+                                    
+                                    <hr/>
+                                    <a href="<?php echo site_url(); ?>" class="btn btn-primary btn-block">SEND EMAIL</a>
+
+                                    <table class="table">
+                                        <tr>
+                                            <th>Email</th>
+                                        </tr>
+                                        <?php
+                                        foreach ($subscriptionlist as $slkey => $slvalue) {
+                                            ?>
+                                            <tr>
+                                                <td>
+                                                    <?php echo $slvalue["email"]; ?>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        ?>
+                                    </table>
                                 </div>
                             </div>
                         </div>

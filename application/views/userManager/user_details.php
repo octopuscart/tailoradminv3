@@ -166,8 +166,10 @@ $this->load->view('layout/topmenu');
 
                     <form method="post" action="#">
                         <div class="button-group">
-                            <button type="submit" name="delete_user" class="btn btn-danger subtext  btn-sm" value="<?php echo $user_details->id; ?>" >Delete User</button>
-                            <button type="submit" name="<?php echo $user_details->status == 'Blocked' ? 'unblock_user' : 'block_user'; ?>" class="btn btn-sm btn-<?php echo $user_details->status == 'Blocked' ? 'success' : 'warning'; ?> subtext" value="<?php echo $user_details->id; ?>" style="margin-right: 10px"><?php echo $user_details->status == 'Blocked' ? 'Unblock User' : 'Block User'; ?></button>
+                            <button type="submit" name="delete_user" class="btn btn-danger subtext  btn-sm" value="<?php echo $user_details->id; ?>" >Delete </button>
+                            <button type="submit" name="<?php echo $user_details->status == 'Blocked' ? 'unblock_user' : 'block_user'; ?>" class="btn btn-sm btn-<?php echo $user_details->status == 'Blocked' ? 'success' : 'warning'; ?> subtext" value="<?php echo $user_details->id; ?>" style="margin-right: 10px"><?php echo $user_details->status == 'Blocked' ? 'Unblock ' : 'Block '; ?></button>
+                            <a  class="btn btn-sm btn-danger subtext" href="<?php echo site_url("Authentication/profile/". $user_details->id); ?>" style="margin-right: 10px">Update</a>
+
                         </div>
                     </form>
                 </div>
@@ -391,10 +393,10 @@ $this->load->view('layout/topmenu');
                     <!--newsletter preference-->
                     <div class="tab-pane" id="newsletter">
                         <div class="row " >
-                            
-                           
 
-                 
+
+
+
                             <div class="col-md-10" id="block_frequncey">
 
                                 <div ng-if="newsalertDict.user_subscription.has_subscription == 'no'">
