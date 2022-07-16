@@ -62,12 +62,12 @@ function userReportFunction($users) {
                             if ($value->image) {
                                 ?>
                                 <img src="<?php echo base_url(); ?>assets/profile_image/<?php echo $value->image; ?>" style="height:51px;">
-                            <?php } else {
-                                
-                                $avatar = $value->gender=='Female'?"avatar3":"avatar5";
-                                
+                            <?php
+                            } else {
+
+                                $avatar = $value->gender == 'Female' ? "avatar3" : "avatar5";
                                 ?>
-                                <img src="<?php echo base_url(); ?>assets/dist/img/<?php echo $avatar;?>.png" style="height:51px;">
+                                <img src="<?php echo base_url(); ?>assets/dist/img/<?php echo $avatar; ?>.png" style="height:51px;">
 
                             <?php }
                             ?>
@@ -79,7 +79,7 @@ function userReportFunction($users) {
                                 <b><span class="seller_tag"><?php echo $value->first_name; ?> <?php echo $value->last_name; ?></span></b>
                                 <br/>
                                 <i class="fa fa-<?php echo strtolower($value->gender); ?>"></i>  <?php echo $value->gender; ?>
-                                <br/>(<?php echo $value->profession?$value->profession:'----'; ?>)
+                                <br/>(<?php echo $value->profession ? $value->profession : '----'; ?>)
                             </span>
                         </td>
 
@@ -129,9 +129,7 @@ function userReportFunction($users) {
             <div class="box-header">
                 <h3 class="box-title">Users Reports</h3>
                 <div class="box-tools pull-right">
-                    <a class="btn btn-success " href="<?php echo site_url('userManager/user_profile_record_xls/all'); ?>"  targer="_blank">
-                        <i class="fa fa-file-excel-o"></i>  Export Data
-                    </a>
+                   
                 </div>
 
             </div>
@@ -168,6 +166,11 @@ $this->load->view('layout/footer');
             language: {
                 "search": "Apply filter _INPUT_ to table"
             }
+            ,
+            dom: 'Blfrtip',
+            buttons: [
+                'excel', 'pdf', 'csv', 'print'
+            ],
         })
     })
 

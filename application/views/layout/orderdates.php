@@ -11,7 +11,7 @@
         <?php
         if ($exportdata == 'yes') {
             ?>
-            <a class="btn btn-warning" href="<?php echo $exportdatalink ?>">Export</a>
+            <!--<a class="btn btn-warning" href="<?php echo $exportdatalink ?>">Export</a>-->
             <?php
         }
         ?>

@@ -205,7 +205,11 @@ $this->load->view('layout/footer');
         $('#tableDataOrder').DataTable({
             "language": {
                 "search": "Search Order By Email, Order No., Order Date Etc."
-            }
+            },
+            dom: 'Blfrtip',
+            buttons: [
+                'excel', 'pdf', 'csv', 'print'
+            ]
         })
     })
 </script>

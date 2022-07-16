@@ -67,9 +67,15 @@
             }
 
             .icon-circle{
-                font-size: 19px; height: 31px;width: 31px;
+                font-size: 19px;
+                height: 31px;
+                width: 31px;
                 background-color: #000;
-                float: left; border-radius: 50%; color: #fff;line-height: 28px;text-align: center;
+                float: left;
+                border-radius: 50%;
+                color: #fff;
+                line-height: 28px;
+                text-align: center;
             }
         </style>
     </head>
@@ -79,7 +85,7 @@
           background: rgb(225, 225, 225);
           font-family: sans-serif;">
         <div class="" style="padding:50px 0px">
-            <?php echo EMAIL_HEADER;?>
+            <?php echo EMAIL_HEADER; ?>
             <table class="detailstable" align="center" border="0" cellpadding="0" cellspacing="0" width="700" style="background: #fff">
                 <tr>
                     <td style="font-size: 12px;width: 50%" >
@@ -180,20 +186,19 @@
                                             <td style=' padding: 10px;'>
                                                 <b>
                                                     <?php
-                                                  
-                                                        echo $osvalue->status;
-                                                   ?>
+                                                    echo $osvalue->status;
+                                                    ?>
                                                 </b>
                                                 <br/>
                                                 <small style="font-weight:300;font-size:13px">
                                                     <?php
-                                                    if($osvalue->status=="Shipped") {
+                                                    if ($osvalue->status == "Shipped") {
                                                         echo $osvalue->description;
                                                     } else {
                                                         echo $osvalue->remark;
                                                     }
                                                     ?>
-              
+
                                                 </small>
 
 
@@ -286,13 +291,18 @@
                     <td colspan="6">
                         <b>Sizes: <?php echo $order_data->measurement_style; ?></b>
                         <br/><?php
-                if (count($measurements_items)) {
-                    foreach ($measurements_items as $keym => $valuem) {
-                        $mvalues = explode(" ", $valuem['measurement_value']);
-                        echo "<p class='style_block'><b>" . $valuem['measurement_key'] . " </b><span> " . $mvalues[0] . " <span class='fr_value'>" . $mvalues[1] . '"' . "</span></span></p>";
-                    }
-                }
-                ?>  
+                        if (count($measurements_items)) {
+                            foreach ($measurements_items as $keym => $valuem) {
+                                $mvalues = explode(" ", $valuem['measurement_value']);
+                                $unit = $valuem['unit'] == "inch" ? '"' : '';
+                                if ($unit) {
+                                    echo "<p class='style_block'><b>" . $valuem['measurement_key'] . " </b><span> " . $mvalues[0] . " <span class='fr_value'>" . $mvalues[1] . "$unit</span></span></p>";
+                                } else {
+                                    echo "<p class='style_block'><b>" . $valuem['measurement_key'] . " </b><span> " . $valuem['measurement_value'] . " </span></p>";
+                                }
+                            }
+                        }
+                        ?>  
                     </td>
                 </tr>
 
@@ -327,13 +337,11 @@
 
 
 
-<?php
+                        <?php
+                        echo EMAIL_FOOTER;
+                        ?>
 
-echo EMAIL_FOOTER;
-
-?>
-
- </td>
+                    </td>
                 </tr>
 
             </table>

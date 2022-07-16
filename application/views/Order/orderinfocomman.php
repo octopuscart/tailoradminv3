@@ -284,8 +284,12 @@
                                                 echo "<ul class='list-group'>";
                                                 foreach ($ordersdetails['measurements_items'] as $keym => $valuem) {
                                                     $mvalues = explode(" ", $valuem['measurement_value']);
-                                                    echo "<li class='list-group-item'>" . $valuem['measurement_key'] . " <span class='measurement_right_text'><span class='measurement_text'>" . $mvalues[0] . "</span><span class='fr_value'>" . $mvalues[1] . '"' . "</span></span></li>";
-                                                }
+ $unit = $valuem['unit'] == "inch" ? '"' : '';
+                                                                if ($unit) {
+                                                                    echo "<li class='list-group-item'>" . $valuem['measurement_key'] . " <span class='measurement_right_text'><span class='measurement_text'>" . $mvalues[0] . "</span><span class='fr_value'>" . $mvalues[1] . '' . "$unit</span></span></li>";
+                                                                } else {
+                                                                    echo "<li class='list-group-item'>" . $valuem['measurement_key'] . " <span class='measurement_right_text'><span class='measurement_text'>" . $valuem['measurement_value'] . "</span></span></li>";
+                                                                }                                                }
                                                 echo "</ul>";
                                                 ?>                             
                                             </div>

@@ -76,12 +76,12 @@ $this->load->view('layout/topmenu');
 <div class="modal fade" id="imageZoomModel" tabindex="-1" role="dialog" aria-labelledby="attributeModel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
-                <div class="modal-body" id="showimageproduct">
-                    <img src="" id="showimageproduct_src" width="100%"/>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+            <div class="modal-body" id="showimageproduct">
+                <img src="" id="showimageproduct_src" width="100%"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
@@ -126,34 +126,34 @@ $this->load->view('layout/topmenu');
 $this->load->view('layout/footer');
 ?> 
 <script>
-    var selectedcolor;
-    var iscolorselect = false;
-    var selectedcolorid;
+                        var selectedcolor;
+                        var iscolorselect = false;
+                        var selectedcolorid;
 
-    function selecteddiv(selectedid) {
-        selectedcolorid = (selectedid);
-    }
-   function zoomImage(imgid){
-       console.log($("#"+imgid).html())
-        $("#showimageproduct_src").attr("src", $("#"+imgid).attr("src"));
-    }
-    function selectcolor() {
-        if (iscolorselect) {
-            console.log(selectedcolor);
-            selectedcolor["product_id"] = selectedcolorid;
-            var innterhtml = '<span class="colorbox" title="Dark Blue" style="background:' + selectedcolor.color_code + '">' + selectedcolor.color_name + '</span>';
-            var buttonhtml = "<button class= 'btn btn-default btn-xs btn-block' data-toggle='modal' data-target='#attributeModel' onclick=selecteddiv('" + selectedcolorid + "')>Add/Change</button>";
-            $.get("<?php echo $set_color_api;?>", selectedcolor, function (r, v) {
-                console.log("color inserted");                                     
-            });
-            $("#" + selectedcolorid).html(innterhtml + buttonhtml);
-        } else {
-            console.log("selected none");
-        }
-    }
+                        function selecteddiv(selectedid) {
+                            selectedcolorid = (selectedid);
+                        }
+                        function zoomImage(imgid) {
+                            console.log($("#" + imgid).html())
+                            $("#showimageproduct_src").attr("src", $("#" + imgid).attr("src"));
+                        }
+                        function selectcolor() {
+                            if (iscolorselect) {
+                                console.log(selectedcolor);
+                                selectedcolor["product_id"] = selectedcolorid;
+                                var innterhtml = '<span class="colorbox" title="Dark Blue" style="background:' + selectedcolor.color_code + '">' + selectedcolor.color_name + '</span>';
+                                var buttonhtml = "<button class= 'btn btn-default btn-xs btn-block' data-toggle='modal' data-target='#attributeModel' onclick=selecteddiv('" + selectedcolorid + "')>Add/Change</button>";
+                                $.get("<?php echo $set_color_api; ?>", selectedcolor, function (r, v) {
+                                    console.log("color inserted");
+                                });
+                                $("#" + selectedcolorid).html(innterhtml + buttonhtml);
+                            } else {
+                                console.log("selected none");
+                            }
+                        }
 
-    $(function () {
-        var colorlist = [];
+                        $(function () {
+                            var colorlist = [];
 <?php
 $colorlistarray = array();
 foreach ($attribuites as $key => $value) {
@@ -167,36 +167,40 @@ foreach ($attribuites as $key => $value) {
 echo "var colorlist=" . json_encode($colorlistarray);
 ?>
 
-        $("#attr_value").on("change", function () {
-            if (this.value) {
-                iscolorselect = true;
-                selectedcolor = colorlist[this.value];
-            } else {
-                iscolorselect = false;
-            }
+                            $("#attr_value").on("change", function () {
+                                if (this.value) {
+                                    iscolorselect = true;
+                                    selectedcolor = colorlist[this.value];
+                                } else {
+                                    iscolorselect = false;
+                                }
 
-        });
+                            });
 
 
 
-        $('#tableData').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": {
-                url: "<?php echo site_url("ProductManager/productReportApi/".$condition) ?>",   
-                type: 'GET'
-            },
-            "columns": [
-                {"data": "s_n"},
-                {"data": "image"},
-                {"data": "category"},
-                {"data": "sku"},
-                {"data": "title"},
-                {"data": "color"},
-                {"data": 'short_description'},
-                {"data": "items_prices"},
-                {"data": "edit"}]
-        })
-    })
+                            $('#tableData').DataTable({
+                                "processing": true,
+                                "serverSide": true,
+                                "ajax": {
+                                    url: "<?php echo site_url("ProductManager/productReportApi/" . $condition) ?>",
+                                    type: 'GET'
+                                },
+                                dom: 'Blfrtip',
+                                buttons: [
+                                    'excel', 'pdf', 'csv', 'print'
+                                ],
+                                "columns": [
+                                    {"data": "s_n"},
+                                    {"data": "image"},
+                                    {"data": "category"},
+                                    {"data": "sku"},
+                                    {"data": "title"},
+                                    {"data": "color"},
+                                    {"data": 'short_description'},
+                                    {"data": "items_prices"},
+                                    {"data": "edit"}]
+                            })
+                        })
 
 </script>

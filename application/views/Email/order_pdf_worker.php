@@ -58,7 +58,7 @@ $lng_array = array(
                         </tr>
                         <tr>
                             <th style="text-align: left;    width: 120px;">Pre. Order No.</th>
-                            <td>:  <?php echo isset($order_data->previouse_order_no)?$order_data->previouse_order_no:''; ?> </td>
+                            <td>:  <?php echo isset($order_data->previouse_order_no) ? $order_data->previouse_order_no : ''; ?> </td>
                         </tr>
                     </table>
                 </div>
@@ -84,7 +84,7 @@ $lng_array = array(
         </tr>
     </table>
 
-  
+
 
 
     <table class="carttable"   align="center" border="0" cellpadding="0" cellspacing="0"  style="background: #fff;width: 100%;margin-top: 20px;">
@@ -106,7 +106,7 @@ $lng_array = array(
                     <?php echo $key + 1; ?>
                 </td>
 
-              
+
 
                 <td colspan="3"  style="width: 200px;padding: 0px 10px;border: 1px solid rgb(157, 153, 150);border-collapse: collapse;">
 
@@ -179,14 +179,27 @@ $lng_array = array(
                         <?php
                         foreach ($measurements_items as $keym => $valuem) {
                             $mvalues = explode(" ", $valuem['measurement_value']);
-                            echo "<tr><td style='border-bottom:1px solid #c0c0c0;padding-left:20px;'>" . $valuem['measurement_key'] . " </td><td style='border-bottom:1px solid #c0c0c0;padding-left:20px;font-family: Sun-ExtA ;'>" . (isset($lng_array[$valuem['measurement_key']]) ? $lng_array[$valuem['measurement_key']] : '') . "</td><td style='border-bottom:1px solid #c0c0c0'>" . $mvalues[0] . " <span style='margin-left: 1px;
+                            $unit = $valuem['unit'] == "inch" ? '"' : '';
+                            if ($unit) {
+                                echo "<tr><td style='border-bottom:1px solid #c0c0c0;padding-left:20px;'>" . $valuem['measurement_key'] . " </td><td style='border-bottom:1px solid #c0c0c0;padding-left:20px;font-family: Sun-ExtA ;'>" . (isset($lng_array[$valuem['measurement_key']]) ? $lng_array[$valuem['measurement_key']] : '') . "</td><td style='border-bottom:1px solid #c0c0c0'>" . $mvalues[0] . " <span style='margin-left: 1px;
     padding: 0;
     font-size: 10px;
 
     position: absolute;
     margin-top: -5px;
     width: 20px;'>" . $mvalues[1] . '"</span>' . "</td>"
-                            . "<td style='border-bottom:1px solid #c0c0c0;padding-left:20px;'></td><td style='border-bottom:1px solid #c0c0c0;padding-left:20px;'></td></tr>";
+                                . "<td style='border-bottom:1px solid #c0c0c0;padding-left:20px;'></td><td style='border-bottom:1px solid #c0c0c0;padding-left:20px;'></td></tr>";
+                            } else {
+                                                                echo "<tr><td style='border-bottom:1px solid #c0c0c0;padding-left:20px;'>" . $valuem['measurement_key'] . " </td><td style='border-bottom:1px solid #c0c0c0;padding-left:20px;font-family: Sun-ExtA ;'>" . (isset($lng_array[$valuem['measurement_key']]) ? $lng_array[$valuem['measurement_key']] : '') . "</td><td style='border-bottom:1px solid #c0c0c0'>" .$valuem['measurement_value'] . " <span style='margin-left: 1px;
+    padding: 0;
+    font-size: 10px;
+
+    position: absolute;
+    margin-top: -5px;
+    width: 20px;'>" . $unit . '</span>' . "</td>"
+                                . "<td style='border-bottom:1px solid #c0c0c0;padding-left:20px;'></td><td style='border-bottom:1px solid #c0c0c0;padding-left:20px;'></td></tr>";
+                           
+                            }
                         }
                     }
                     ?>  

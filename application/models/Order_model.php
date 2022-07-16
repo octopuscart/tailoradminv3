@@ -91,7 +91,7 @@ class Order_model extends CI_Model {
             $query = $this->db->get('cart');
             $cart_items = $query->result();
 
-            $this->db->order_by('display_index', 'asc');
+//            $this->db->order_by('display_index', 'asc');
             $this->db->where('custom_measurement_profile', $order_details->measurement_id);
             $query = $this->db->get('custom_measurement');
             $custom_measurement = $query->result_array();

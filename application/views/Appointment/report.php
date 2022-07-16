@@ -119,9 +119,14 @@ $this->load->view('layout/footer');
             $('input[name=daterange]').val(start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
         });
         $('#location_table').DataTable({
+            
             "language": {
                 "search": "Search Order By Email, First Name, Last Name Etc."
-            }
+            },
+             dom: 'Blfrtip',
+            buttons: [
+                'excel', 'pdf', 'csv', 'print'
+            ]
         })
     })
 </script>

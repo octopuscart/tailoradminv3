@@ -124,7 +124,11 @@ $this->load->view('layout/footer');
         $('#location_table').DataTable({
             "language": {
                 "search": "Search Order By Email, First Name, Last Name Etc."
-            }
+            },
+             dom: 'Blfrtip',
+            buttons: [
+                'excel', 'pdf', 'csv', 'print'
+            ]
         })
     })
 </script>

@@ -12,7 +12,8 @@
 <!-- ================== BEGIN PAGE LEVEL JS ================== -->
 <script src="<?php echo base_url(); ?>assets/js/apps.min.js"></script>
 <!-- ================== END PAGE LEVEL JS ================== -->
-
+  
+   
 <script>
     $(document).ready(function () {
         App.init();

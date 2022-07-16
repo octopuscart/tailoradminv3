@@ -163,13 +163,24 @@ echo PDF_HEADER;
             if (count($measurements_items)) {
                 foreach ($measurements_items as $keym => $valuem) {
                     $mvalues = explode(" ", $valuem['measurement_value']);
-                    echo "<tr><td style='width: 300px;border-bottom:1px solid #c0c0c0;padding-left:20px;'>" . $valuem['measurement_key'] . "</td><td style='border-bottom:1px solid #c0c0c0'>" . $mvalues[0] . " <span style='margin-left: 1px;
+                    $unit = $valuem['unit'] == "inch" ? '"' : '';
+                    if ($unit) {
+                        echo "<tr><td style='width: 300px;border-bottom:1px solid #c0c0c0;padding-left:20px;'>" . $valuem['measurement_key'] . "</td><td style='border-bottom:1px solid #c0c0c0'>" . $mvalues[0] . " <span style='margin-left: 1px;
     padding: 0;
     font-size: 10px;
 
     position: absolute;
     margin-top: -5px;
-    width: 20px;'>" . $mvalues[1] . '"</span>' . "</td></tr>";
+    width: 20px;'>" . $mvalues[1] . $unit . '"</span>' . "</td></tr>";
+                    } else {
+                        echo "<tr><td style='width: 300px;border-bottom:1px solid #c0c0c0;padding-left:20px;'>" . $valuem['measurement_key'] . "</td><td style='border-bottom:1px solid #c0c0c0'>" . $valuem['measurement_value'] . " <span style='margin-left: 1px;
+    padding: 0;
+    font-size: 10px;
+
+    position: absolute;
+    margin-top: -5px;
+    width: 20px;'>" . $unit   . "</span></td></tr>";
+                    }
                 }
             }
             ?>  
@@ -196,11 +207,11 @@ echo PDF_HEADER;
 </tr>
 <tr style="">
     <td colspan="2" style="text-align: right;text-align: right;padding: 0px 10px;border: 1px solid rgb(157, 153, 150);border-collapse: collapse;">Shipping Amount</td>
-    <td style="text-align: right;width: 60px;text-align: right;padding: 0px 10px;border: 1px solid rgb(157, 153, 150);border-collapse: collapse;"><?php echo GLOBAL_CURRENCY . " " . number_format($order_data->shipping?$order_data->shipping:0, 2, '.', ''); ?> </td>
+    <td style="text-align: right;width: 60px;text-align: right;padding: 0px 10px;border: 1px solid rgb(157, 153, 150);border-collapse: collapse;"><?php echo GLOBAL_CURRENCY . " " . number_format($order_data->shipping ? $order_data->shipping : 0, 2, '.', ''); ?> </td>
 </tr>
 <tr style="">
     <td colspan="2" style="text-align: right;text-align: right;padding: 0px 10px;border: 1px solid rgb(157, 153, 150);border-collapse: collapse;">Coupon Discount</td>
-    <td style="text-align: right;width: 60px;text-align: right;padding: 0px 10px;border: 1px solid rgb(157, 153, 150);border-collapse: collapse;"><?php echo GLOBAL_CURRENCY . " " . number_format($order_data->discount?$order_data->discount:0, 2, '.', ''); ?> </td>
+    <td style="text-align: right;width: 60px;text-align: right;padding: 0px 10px;border: 1px solid rgb(157, 153, 150);border-collapse: collapse;"><?php echo GLOBAL_CURRENCY . " " . number_format($order_data->discount ? $order_data->discount : 0, 2, '.', ''); ?> </td>
 </tr>
 <tr style="">
     <td colspan="2" style="text-align: right;text-align: right;padding: 0px 10px;border: 1px solid rgb(157, 153, 150);border-collapse: collapse;">Toal Amount</td>
