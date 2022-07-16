@@ -103,7 +103,7 @@ $msg_menu = array(
     "active" => "",
     "sub_menu" => array(
         "Create Template" => site_url("CMS/createNewsletter"),
-        "Template List" => site_url("CMD/newsLetterTempalteList"),
+        "Template List" => site_url("CMS/newsLetterTempalteList"),
     ),
 );
 
