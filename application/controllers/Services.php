@@ -74,7 +74,7 @@ class Services extends CI_Controller {
         }
         $daterange = $date1 . " to " . $date2;
         $data['daterange'] = $daterange;
-         $data['exportdata'] = 'yes';
+        $data['exportdata'] = 'yes';
         $data['exportdatalink'] = site_url("Services/appointment_report_export/$daterange");
         $query = $this->db->get('appointment_list');
         $appointment_reports = $query->result_array();
@@ -121,6 +121,26 @@ class Services extends CI_Controller {
         $systemlog = $query->result();
         $data['systemlog'] = $systemlog;
         $this->load->view("Services/systemLogReport", $data);
+    }
+
+    function contectFormReport() {
+        $data = array();
+        $data['exportdata'] = 'yes';
+
+        $date1 = date('Y-m-') . "01";
+        $date2 = date('Y-m-d');
+        if (isset($_GET['daterange'])) {
+            $daterange = $this->input->get('daterange');
+            $datelist = explode(" to ", $daterange);
+            $date1 = $datelist[0];
+            $date2 = $datelist[1];
+        }
+        $daterange = $date1 . " to " . $date2;
+        $data['daterange'] = $daterange;
+        $query = $this->db->order_by("id desc")->get('web_enquiry');
+        $web_enquiry = $query->result_array();
+        $data["reports"] = $web_enquiry;
+        $this->load->view("Services/contact_report", $data);
     }
 
 }

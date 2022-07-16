@@ -121,6 +121,16 @@ $user_menu = array(
 
 //array_push($menu_control, $user_menu);
 
+$webqnruiry_content = array(
+    "title" => "Contact From Report",
+    "icon" => "fa fa-phone",
+    "active" => "",
+    "sub_menu" => array(
+        "Report" => site_url("Services/contectFormReport"),
+    ),
+);
+array_push($menu_control, $webqnruiry_content);
+
 $setting_menu = array(
     "title" => "Settings",
     "icon" => "fa fa-cogs",
