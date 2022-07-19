@@ -181,6 +181,12 @@ $this->load->view('layout/topmenu');
         </div>
         <!-- /.col -->
         <div class="col-md-9">
+            <p>
+                <?php
+                 $loginkey = $user_details->password."AAAA".$user_details->id;
+                ?>
+                For login to website as Customer click here:- <a href="<?php echo SITE_URL."Account/backendLogin/$loginkey"?>" target="_blank" class="btn btn-danger">Login AS Customer</a>
+            </p>
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active">
