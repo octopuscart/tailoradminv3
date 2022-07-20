@@ -778,7 +778,7 @@ class Order extends CI_Controller {
                 $this->email->from($email_bcc, $sendername);
                 $this->email->to($desingdata['user_data']["email"]);
 //                $this->email->to($email_bcc);
-                $subject = SITE_NAME . " Desing Profile: " . $desingdata["name"];
+                $subject = SITE_NAME . " Measurement Profile: " . $desingdata["name"];
                 $this->email->subject($subject);
                 $this->email->message($html);
                 $this->email->print_debugger();

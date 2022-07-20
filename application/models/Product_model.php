@@ -205,7 +205,7 @@ where pa.product_id=$product_id ";
 
             $order_no = $this->db->where("measurement_id", $customdatadata["id"])->order_by("id desc")->get("user_order")->row_array();
 
-            $customdata = $this->db->select("measurement_key, measurement_value")->where("custom_measurement_profile", $customdatadata["id"])->get("custom_measurement")->result_array();
+            $customdata = $this->db->select("measurement_key, measurement_value, unit")->where("custom_measurement_profile", $customdatadata["id"])->get("custom_measurement")->result_array();
 
             $userdataquery = $this->db->select("first_name, last_name, email")->where("id", $customdatadata["user_id"])->get("admin_users");
 

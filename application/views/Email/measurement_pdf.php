@@ -31,7 +31,7 @@ echo PDF_HEADER;
 
     position: absolute;
     margin-top: -5px;
-    width: 20px;'>" . $mvalues[1] . '"</span>';
+    width: 20px;'>" . $mvalues[1] . '</span>';
                 ?> 
             </td>
         </tr>
