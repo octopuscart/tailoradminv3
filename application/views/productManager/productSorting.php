@@ -117,7 +117,7 @@ $this->load->view('layout/topmenu');
                                         </span>
                                         <input type="text" class="form-control" ng-model="product.display_index">
                                         <span class="input-group-addon">
-                                            <input type="checkpanel" aria-label="..." ng-model="product.checked">
+                                            <input type="checkbox" aria-label="..." ng-model="product.checked">
                                         </span>
 
                                     </div><!-- /input-group -->
