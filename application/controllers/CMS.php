@@ -8,13 +8,13 @@ class CMS extends CI_Controller {
         parent::__construct();
         $this->curd = $this->load->model('Curd_model');
         $session_user = $this->session->userdata('logged_in');
+        $this->user_type = "";
         if ($session_user) {
             $this->user_id = $session_user['login_id'];
+            $this->user_type = $this->session->logged_in['user_type'];
         } else {
             $this->user_id = 0;
         }
-        $this->user_id = $this->session->userdata('logged_in')['login_id'];
-        $this->user_type = $this->session->logged_in['user_type'];
     }
 
     ####################################
@@ -274,6 +274,51 @@ class CMS extends CI_Controller {
             redirect("CMS/newsLetterTempalteList");
         }
         $this->load->view('CMS/newsletter/sendnewsletter', $data);
+    }
+
+    public function createPage() {
+        $pageobj = array("title" => "", "content" => "", "uri" => "");
+        $data["pageobj"] = $pageobj;
+        if (isset($_POST["update_data"])) {
+            $content_pages = array(
+                "title" => $this->input->post("title"),
+                "uri" => $this->input->post("uri"),
+                "content" => $this->input->post("content"),
+            );
+            $this->db->insert("content_pages", $content_pages);
+            redirect("CMS/createPage");
+        }
+        $this->load->view('CMS/Pages/create', $data);
+    }
+
+    public function pageList() {
+        $data = array();
+        $this->db->order_by('id', 'desc');
+        $query = $this->db->get('content_pages');
+        $templatelist = $query->result_array();
+        $data['pagelist'] = $templatelist;
+        $this->load->view('CMS/Pages/list', $data);
+    }
+
+    public function editPage($id = 0) {
+        $this->db->where('id', $id);
+        $query = $this->db->get('content_pages');
+        if ($query) {
+            $pageobj = $query->row_array();
+        } else {
+            $pageobj = array("title" => "", "content" => "", "uri" => "");
+        }
+        $data["pageobj"] = $pageobj;
+        if (isset($_POST["update_data"])) {
+            $content_pages = array(
+                "title" => $this->input->post("title"),
+                "content" => $this->input->post("content"),
+            );
+            $this->db->where('id', $id);
+            $this->db->update("content_pages", $content_pages);
+            redirect("CMS/editPage/$id");
+        }
+        $this->load->view('CMS/Pages/create', $data);
     }
 
 }

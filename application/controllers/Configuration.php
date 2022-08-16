@@ -6,26 +6,22 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 ob_start();
 
-class Configuration extends CI_Controller
-{
+class Configuration extends CI_Controller {
 
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->load->model('Product_model');
         $this->load->model('User_model');
         $this->load->library('session');
-        $this->user_id = $this->session->userdata('logged_in')['login_id'];
-        $this->user_type = $this->session->logged_in['user_type'];
+  
     }
 
-    public function index()
-    {
+    public function index() {
+        
     }
 
     //Add product function
-    function add_sliders($slider_id = 0)
-    {
+    function add_sliders($slider_id = 0) {
         $query = $this->db->get('sliders');
         $data['sliders'] = $query->result();
 
@@ -153,8 +149,7 @@ class Configuration extends CI_Controller
         $this->load->view('Configuration/add_sliders', $data);
     }
 
-    public function reportConfiguration()
-    {
+    public function reportConfiguration() {
         $data = array();
         $this->db->order_by('id', 'desc');
         $query = $this->db->get('configuration_report');
@@ -175,8 +170,7 @@ class Configuration extends CI_Controller
         $this->load->view("configuration/reportConfiguration", $data);
     }
 
-    public function checkokutConfiguration()
-    {
+    public function checkokutConfiguration() {
         $data = array();
 
         $query = $this->db->get('configuration_cartcheckout');
@@ -185,20 +179,17 @@ class Configuration extends CI_Controller
         $this->load->view("configuration/checkout", $data);
     }
 
-    public function migration()
-    {
-        if ($this->db->table_exists('mailchimp_list')) {
+    public function migration() {
+        if ($this->db->table_exists('content_pages')) {
             // table exists
         } else {
-            $this->db->query('CREATE TABLE IF NOT EXISTS `mailchimp_list` (
+            $this->db->query('CREATE TABLE IF NOT EXISTS `content_pages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `m_id` varchar(100) DEFAULT NULL,
-  `name` varchar(250) DEFAULT NULL,
-  `datetime` varchar(100) DEFAULT NULL,
-  `member_count` varchar(50) NOT NULL,
-  `display_index` varchar(50) NOT NULL,
+  `title` varchar(250) NOT NULL,
+  `content` longtext NOT NULL,
+  `uri` varchar(250) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;');
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;');
         }
 
 
@@ -208,4 +199,5 @@ class Configuration extends CI_Controller
             $this->db->query('ALTER TABLE `appointment_list` ADD `hotel` VARCHAR(200) NOT NULL AFTER `contact_no`, ADD `address` VARCHAR(300) NOT NULL AFTER `hotel`, ADD `city_state` VARCHAR(200) NOT NULL AFTER `address`, ADD `country` VARCHAR(200) NOT NULL AFTER `city_state`;');
         }
     }
+
 }

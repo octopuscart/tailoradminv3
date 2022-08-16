@@ -23,6 +23,9 @@ class Product_model extends CI_Model {
             }
             return $data; //format the array into json data
         }
+        else{
+            return array();
+        }
     }
 
     function delete_table_information($tableName, $columnName, $id) {
@@ -167,6 +170,16 @@ where pa.product_id=$product_id ";
             return array();
         }
     }
+    
+     function category_items_prices_id2($category_items_id, $item_id) {
+
+        $queryr = "SELECT cip.price, cip.sale_price, ci.item_name, cip.item_id, cip.id FROM custome_items_price as cip
+                       join custome_items as ci on ci.id = cip.item_id
+                       where cip.category_items_id = $category_items_id and cip.item_id = $item_id";
+        $query = $this->db->query($queryr);
+        $category_items_price_array = $query ? $query->row() : array();
+        return $category_items_price_array;
+    }
 
     function category_items_prices() {
         $query = $this->db->get('category_items');
@@ -185,7 +198,7 @@ where pa.product_id=$product_id ";
     function stringCategories($category_id) {
         $this->db->where('parent_id', $category_id);
         $query = $this->db->get('category');
-        $category = $query->result_array();
+        $category = $query ? $query->result_array() : array();
         $container = "";
         foreach ($category as $ckey => $cvalue) {
             $container .= $this->stringCategories($cvalue['id']);

@@ -130,12 +130,7 @@ $this->load->view('layout/footer');
 
     $(function () {
 
-
-
-
-
-
-        FormWysihtml5.init();
+    FormWysihtml5.init();
 
 
     })

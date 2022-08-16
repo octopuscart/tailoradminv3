@@ -93,6 +93,7 @@ $website_content = array(
     "sub_menu" => array(
         "FAQ's Management" => site_url("CMS/faqSetting"),
         "Testimonial Management" => site_url("CMS/testimonialSetting"),
+        "Website Pages" => site_url("CMS/pageList"),
     ),
 );
 array_push($menu_control, $website_content);

@@ -675,7 +675,220 @@ class Api extends REST_Controller {
         $this->db->where("measurement_key", $fieldname);
         $this->db->update($tablename);
     }
-    
+
+    //ProductList APi
+    public function productListApi_get($category_id, $custom_id) {
+        $attrdatak = $this->get();
+        $startpage = $attrdatak["start"] - 1;
+        $endpage = $attrdatak["end"];
+        unset($attrdatak["start"]);
+        unset($attrdatak["end"]);
+        $products = [];
+        $countpr = 0;
+        $pricequery = "";
+        $psearch = "";
+        if (isset($attrdatak["search"])) {
+            $searchdata = $attrdatak["search"];
+            unset($attrdatak["search"]);
+            if ($searchdata) {
+                $psearch = " and title like '%$searchdata%' ";
+            }
+        }
+        $filterquery = "";
+        if (isset($attrdatak["filter"])) {
+            switch ($attrdatak["filter"]) {
+                case "Sales":
+                    $filterquery = "  is_sale desc, ";
+
+                    break;
+                case "Popular":
+                    $filterquery = "  is_populer  desc, ";
+                    break;
+                case "Related":
+
+                    break;
+                default:
+            }
+        }
+
+        $pricefilter = isset($attrdatak['pfilter']) ? $attrdatak['pfilter'] . "" : "";
+        $pricelistarray = array();
+        if ($pricefilter) {
+            $pricelistarrayt = explode("--", $pricefilter);
+            foreach ($pricelistarrayt as $key => $value) {
+                $pricelistarray[$value] = $value;
+            }
+        }
+
+
+        if (isset($attrdatak["a47"])) {
+            $val = str_replace("-", ", ", $attrdatak["a47"]);
+            $query_attr = "SELECT product_id FROM product_attribute
+                           where  attribute_id in (47) and attribute_value_id in ($val)
+                           group by product_id";
+            $queryat = $this->db->query($query_attr);
+            $productslist = $queryat ? $queryat->result() : array();
+            foreach ($productslist as $key => $value) {
+                array_push($products, $value->product_id);
+            }
+        }
+
+        //print_r($products);
+
+        $productdict = [];
+
+        $productcheck = array_count_values($products);
+
+        //print_r($productcheck);
+
+        foreach ($productcheck as $key => $value) {
+            if ($value == 1) {
+                array_push($productdict, $key);
+            }
+        }
+
+        $proquery = "";
+        if (count($productdict)) {
+            $proquerylist = implode(",", $productdict);
+            $proquery = " and pt.id in ($proquerylist) ";
+        }
+
+        $categoriesString = $this->Product_model->stringCategories($category_id) . ", " . $category_id;
+        $categoriesString = ltrim($categoriesString, ", ");
+
+        $product_query = "select pt.id as product_id, pt.*
+            from products as pt where pt.category_id in ($categoriesString) $psearch $pricequery $proquery  order by $filterquery display_index desc";
+        $product_result = $this->Product_model->query_exe($product_query);
+
+        $productListSt = [];
+
+        $productListFinal = [];
+        $productListFinalTotal = [];
+
+        $pricecount = [];
+
+        $priceListWidget = array();
+
+        $brandWidget = array();
+
+        foreach ($product_result as $key => $value) {
+            $value['attr'] = $this->Product_model->singleProductAttrs($value['product_id']);
+            $item_price = $this->Product_model->category_items_prices_id2($value['category_items_id'], $custom_id);
+
+            $brandcheck = $this->db->select("category_name as brand")->where("id", $value['category_items_id'])->get("category_items");
+            $brandname = $brandcheck ? $brandcheck->row_array()["brand"] : "";
+
+            $price_p = $item_price ? $item_price->price : 0;
+            $price_s = $item_price ? $item_price->sale_price : 0;
+
+            $value['price'] = $value['is_sale'] == 'true' ? $price_s : $price_p;
+            $value['org_price'] = $price_p;
+
+            if ($brandname) {
+                $brandWidget[$brandname] = $price_p;
+            }
+
+
+            array_push($pricecount, $value['price']);
+
+            $priceListWidget[$price_p] = $price_p;
+
+            if ($pricelistarray) {
+
+                if (isset($pricelistarray[$price_p])) {
+
+                    array_push($productListFinal, $value);
+                    array_push($productListSt, $value['product_id']);
+                }
+            } else {
+
+
+                array_push($productListFinal, $value);
+                array_push($productListSt, $value['product_id']);
+            }
+
+//            array_push($productListFinal, $value);
+        }
+
+        $attr_filter = array();
+        $pricelist = array();
+        if (count($productListSt)) {
+            $pricelist = array('maxprice' => max($pricecount), 'minprice' => min($pricecount));
+
+            $productString = implode(",", $productListSt);
+
+            $attr_query = "select count(cav.id) product_count, '' as checked, cvv.widget, cav.attribute_value, cav.additional_value, cav.id, pa.attribute, pa.attribute_id from product_attribute as pa
+        join category_attribute_value as cav on cav.id = pa.attribute_value_id
+        join category_attribute as cvv on cvv.id = cav.attribute_id
+        where pa.product_id in ($productString)
+        group by cav.id";
+            $attr_result = $this->Product_model->query_exe($attr_query);
+
+            foreach ($attr_result as $key => $value) {
+                $filter = $value['attribute_id'];
+                $attitle = $value['attribute'];
+                $widget = $value['widget'];
+                if (isset($attr_filter[$filter])) {
+                    array_push($attr_filter[$filter], $value);
+                } else {
+                    $attr_filter[$filter] = array("title" => $attitle, "attrs" => [], "widget" => $widget);
+                    array_push($attr_filter[$filter], $value);
+                }
+            }
+        }
+        $productListFinal = array_slice($productListFinal, $startpage, 12);
+        $this->output->set_header('Content-type: application/json');
+        $productArray = array('attributes' => $attr_filter,
+            'products' => $productListFinal,
+            'product_count' => count($productListSt),
+            'price' => $pricelist,
+            "priceList" => $priceListWidget,
+            "brandList" => $brandWidget
+        );
+        $this->response($productArray);
+    }
+
+    //function for product list
+    function priceAsk_post() {
+        $product_id = $this->post('product_id');
+        $item_id = $this->post('item_id');
+        $product_details = $this->Product_model->productDetails($product_id, $item_id);
+        $session_enquiry_price = $this->session->userdata('session_enquiry_price');
+        if ($session_enquiry_price) {
+            if (isset($session_enquiry_price[$item_id])) {
+                $session_enquiry_price[$item_id][$product_id] = $product_details;
+            } else {
+                $session_enquiry_price[$item_id] = array($product_id => $product_details);
+            }
+        } else {
+            $session_enquiry_price = array($item_id => array($product_id => $product_details));
+        }
+        $this->session->set_userdata('session_enquiry_price', $session_enquiry_price);
+    }
+
+    function priceAsk_get($item_id) {
+        $session_enquiry_price = $this->session->userdata('session_enquiry_price');
+        if ($session_enquiry_price) {
+            if (isset($session_enquiry_price[$item_id])) {
+                $rdata = $session_enquiry_price[$item_id];
+            } else {
+                $rdata = array();
+            }
+        } else {
+            $session_enquiry_price = array($item_id => array());
+            $rdata = $session_enquiry_price[$item_id];
+            $this->session->set_userdata('session_enquiry_price', $session_enquiry_price);
+        }
+        $this->response($rdata);
+    }
+
+    function priceAskDelete_get($item_id, $product_id) {
+        $session_enquiry_price = $this->session->userdata('session_enquiry_price');
+
+        unset($session_enquiry_price[$item_id][$product_id]);
+
+        $this->session->set_userdata('session_enquiry_price', $session_enquiry_price);
+    }
 
 }
 
