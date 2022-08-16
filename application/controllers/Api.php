@@ -678,6 +678,8 @@ class Api extends REST_Controller {
 
     //ProductList APi
     public function productListApi_get($category_id, $custom_id) {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
         $attrdatak = $this->get();
         $startpage = $attrdatak["start"] - 1;
         $endpage = $attrdatak["end"];
@@ -848,47 +850,7 @@ class Api extends REST_Controller {
         $this->response($productArray);
     }
 
-    //function for product list
-    function priceAsk_post() {
-        $product_id = $this->post('product_id');
-        $item_id = $this->post('item_id');
-        $product_details = $this->Product_model->productDetails($product_id, $item_id);
-        $session_enquiry_price = $this->session->userdata('session_enquiry_price');
-        if ($session_enquiry_price) {
-            if (isset($session_enquiry_price[$item_id])) {
-                $session_enquiry_price[$item_id][$product_id] = $product_details;
-            } else {
-                $session_enquiry_price[$item_id] = array($product_id => $product_details);
-            }
-        } else {
-            $session_enquiry_price = array($item_id => array($product_id => $product_details));
-        }
-        $this->session->set_userdata('session_enquiry_price', $session_enquiry_price);
-    }
-
-    function priceAsk_get($item_id) {
-        $session_enquiry_price = $this->session->userdata('session_enquiry_price');
-        if ($session_enquiry_price) {
-            if (isset($session_enquiry_price[$item_id])) {
-                $rdata = $session_enquiry_price[$item_id];
-            } else {
-                $rdata = array();
-            }
-        } else {
-            $session_enquiry_price = array($item_id => array());
-            $rdata = $session_enquiry_price[$item_id];
-            $this->session->set_userdata('session_enquiry_price', $session_enquiry_price);
-        }
-        $this->response($rdata);
-    }
-
-    function priceAskDelete_get($item_id, $product_id) {
-        $session_enquiry_price = $this->session->userdata('session_enquiry_price');
-
-        unset($session_enquiry_price[$item_id][$product_id]);
-
-        $this->session->set_userdata('session_enquiry_price', $session_enquiry_price);
-    }
+  
 
 }
 
