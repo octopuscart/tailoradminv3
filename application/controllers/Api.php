@@ -623,7 +623,6 @@ class Api extends REST_Controller {
     }
 
     function resetPassword_post() {
-
         header('Access-Control-Allow-Origin: *');
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
         $email = $this->post('email');
@@ -850,7 +849,39 @@ class Api extends REST_Controller {
         $this->response($productArray);
     }
 
-  
+    //newsletter subscription
+    function newsletterSubscription_post() {
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+        $email = $this->post('email');
+        $this->db->where('email', $email);
+        $query = $this->db->get("newsletter_subscription");
+        $userData = $query->row_array();
+
+        $subdata = array(
+            "newsletter_type" => "Full Experience",
+            'c_time' => date('H:i:s a'),
+            'c_date' => date('Y-m-d'),
+            'email' => $email,
+            'user_type' => "Website Visitor"
+        );
+        $status = "404";
+        if ($userData) {
+            
+        } else {
+            $status = "200";
+            $subdata["user_id"] = "Visitor";
+            $this->db->insert('newsletter_subscription', $subdata);
+            $this->Order_model->newsletterSubscription($email);
+        }
+        $this->response(array("status" => $status));
+    }
+
+    function newsletterSubscription_get() {
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+        header('Access-Control-Allow-Origin: *');
+        $this->Order_model->newsletterSubscription("octopuscartltd@gmail.com");
+    }
 
 }
 

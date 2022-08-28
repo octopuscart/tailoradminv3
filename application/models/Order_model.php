@@ -276,8 +276,6 @@ class Order_model extends CI_Model {
         return $preitemdata;
     }
 
-
-
     public function selectPreviouseMeasurementProfilesReport($profile_id) {
 
         $row_query = "SELECT id, profile, order_id, user_id,  status, datetime FROM `custom_measurement_profile` where id = $profile_id order by status desc;";
@@ -336,6 +334,29 @@ class Order_model extends CI_Model {
     function getUserSubscriptionByUserId($user_id) {
         $querydata = $this->db->where("user_id", $user_id)->get("newsletter_subscription")->row_array();
         return $querydata;
+    }
+
+    function newsletterSubscription($email) {
+        $emailsender = EMAIL_SENDER;
+        $sendername = EMAIL_SENDER_NAME;
+        $email_bcc = EMAIL_BCC;
+        if ($email) {
+            $checkcode = REPORT_MODE;
+//            $checkcode = 0;
+            $html = $this->load->view('Email/newslatterEmail', array("user_data" => $email), true);
+            if ($checkcode == 0) {
+                echo $html;
+            } else {
+                $this->email->from(EMAIL_BCC, $sendername);
+                $this->email->to($email);
+                $this->email->bcc(EMAIL_BCC);
+                $subject = SITE_NAME . " - " . "Thank you for subscribing!";
+                $this->email->subject($subject);
+                $this->email->message($html);
+                $this->email->print_debugger();
+                $result = $this->email->send();
+            }
+        }
     }
 
 }
