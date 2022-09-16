@@ -99,7 +99,10 @@ $session_data = $this->session->userdata('logged_in');
                             <div class="tab-pane active" id="tab_0">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <img class="" src="<?php echo product_image_base; ?>/thumb/<?php echo $product_obj->folder; ?>/fabric20001.png" style='width: 100%'/>
+                                        <?php
+                                      $foldername =  str_replace("folder", $product_obj->folder, PRODUCT_FOLDER);
+                                        ?>
+                                        <img class="" src="<?php echo product_image_base.$foldername; ?>" style='width: 100%'/>
                                     </div>  
 
 
