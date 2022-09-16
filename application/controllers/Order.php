@@ -50,7 +50,7 @@ class Order extends CI_Controller {
         $date2 = date('Y-m-d');
 
         $data = array();
-  
+
         $data['blog_data'] = array();
 
         $this->db->order_by('id', 'desc');
@@ -718,6 +718,8 @@ class Order extends CI_Controller {
     }
 
     public function selectPreviouseProfilesReport($desing_id, $ispdf_mail = 0) {
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
         $desingdata = $this->Product_model->singleProfileDetails($desing_id);
         $data["desingdata"] = $desingdata;
         $html = $this->load->view('Email/desing_pdf', $data, true);
@@ -753,6 +755,8 @@ class Order extends CI_Controller {
     }
 
     public function selectPreviouseMeasurementProfilesReport($profile_id, $ispdf_mail = 0) {
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
         $desingdata = $this->Product_model->selectPreviouseMeasurementProfilesReport($profile_id);
         $data["desingdata"] = $desingdata;
         $html = $this->load->view('Email/measurement_pdf', $data, true);
@@ -775,7 +779,7 @@ class Order extends CI_Controller {
                 $emailsender = EMAIL_SENDER;
                 $sendername = EMAIL_SENDER_NAME;
                 $email_bcc = EMAIL_BCC;
-                 $this->email->from(EMAIL_SENDER, $sendername);
+                $this->email->from(EMAIL_SENDER, $sendername);
                 $this->email->to($desingdata['user_data']["email"]);
 //                $this->email->to($email_bcc);
                 $subject = SITE_NAME . " Measurement Profile: " . $desingdata["name"];
