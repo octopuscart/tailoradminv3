@@ -176,7 +176,7 @@ class Order_model extends CI_Model {
             if ($checkcode == 0) {
                 echo $this->load->view('Email/order_mail', $order_details, true);
             } else {
-                $this->email->from(EMAIL_BCC, $sendername);
+                $this->email->from(EMAIL_SENDER, $sendername);
                 $this->email->to($order_details['order_data']->email);
                 $this->email->bcc(EMAIL_BCC);
                 $subject = SITE_NAME . " - " . $currentstatus->remark;
@@ -347,7 +347,7 @@ class Order_model extends CI_Model {
             if ($checkcode == 0) {
                 echo $html;
             } else {
-                $this->email->from(EMAIL_BCC, $sendername);
+                $this->email->from(EMAIL_SENDER, $sendername);
                 $this->email->to($email);
                 $this->email->bcc(EMAIL_BCC);
                 $subject = SITE_NAME . " - " . "Thank you for subscribing!";

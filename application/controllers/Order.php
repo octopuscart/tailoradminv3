@@ -740,7 +740,7 @@ class Order extends CI_Controller {
                 $emailsender = EMAIL_SENDER;
                 $sendername = EMAIL_SENDER_NAME;
                 $email_bcc = EMAIL_BCC;
-                $this->email->from($email_bcc, $sendername);
+                $this->email->from(EMAIL_SENDER, $sendername);
                 $this->email->to($desingdata['user_data']["email"]);
 //                $this->email->bcc($email_bcc);
                 $subject = SITE_NAME . " Desing Profile: " . $desingdata["name"];
@@ -775,7 +775,7 @@ class Order extends CI_Controller {
                 $emailsender = EMAIL_SENDER;
                 $sendername = EMAIL_SENDER_NAME;
                 $email_bcc = EMAIL_BCC;
-                $this->email->from($email_bcc, $sendername);
+                 $this->email->from(EMAIL_SENDER, $sendername);
                 $this->email->to($desingdata['user_data']["email"]);
 //                $this->email->to($email_bcc);
                 $subject = SITE_NAME . " Measurement Profile: " . $desingdata["name"];
