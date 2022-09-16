@@ -2,7 +2,7 @@
 echo PDF_HEADER;
 ?>
 
-<table class="detailstable" align="center" border="0" cellpadding="0" cellspacing="0" width="400" style="background: #fff;margin-top:20px;">
+<table class="detailstable" align="center" border="0" cellpadding="0" cellspacing="0"  style="background: #fff;margin-top:20px;">
     <tr>
         <td colspan="2">Name : <?php echo $desingdata["user_data"]["first_name"] . " " . $desingdata["user_data"]["last_name"]; ?></td>
     </tr>
