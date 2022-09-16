@@ -730,6 +730,7 @@ class Order extends CI_Controller {
             if ($ispdf_mail) {
                 $this->load->library('pdf');
                 $this->dompdf->set_option('isRemoteEnabled', true);
+                
                 // Load HTML content
                 $this->dompdf->loadHtml($html);
                 // (Optional) Setup the paper size and orientation
