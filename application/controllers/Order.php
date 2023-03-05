@@ -479,7 +479,7 @@ class Order extends CI_Controller {
 
     function order_mail_send_direct($order_key) {
         $this->Order_model->order_mail($order_key);
-        redirect("Order/orderdetails/$order_key");
+//        redirect("Order/orderdetails/$order_key");
     }
 
     function order_pdf($order_id) {

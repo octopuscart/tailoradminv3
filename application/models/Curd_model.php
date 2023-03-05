@@ -48,7 +48,7 @@ class Curd_model extends CI_Model {
         $data['list_data'] = $categories_data;
         $fields = array();
         $fields["id"] = array("title" => "ID#", "width" => "100px");
-       $fields = array_merge($fields, $form_attr);
+        $fields = array_merge($fields, $form_attr);
         $data['fields'] = $fields;
         $data['form_attr'] = $form_attr;
         return $data;

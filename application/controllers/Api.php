@@ -777,7 +777,7 @@ class Api extends REST_Controller {
             $item_price = $this->Product_model->category_items_prices_id2($value['category_items_id'], $custom_id);
 
             $brandcheck = $this->db->select("category_name as brand")->where("id", $value['category_items_id'])->get("category_items");
-            $brandname = $brandcheck ? $brandcheck->row_array()["brand"] : "";
+            $brandname = $brandcheck->row_array() ? $brandcheck->row_array()["brand"] : "";
 
             $price_p = $item_price ? $item_price->price : 0;
             $price_s = $item_price ? $item_price->sale_price : 0;
